@@ -199,7 +199,7 @@ class EvaluationTracker:
                 path.mkdir(parents=True, exist_ok=True)
 
                 self.date_id = datetime.now().isoformat().replace(":", "-")
-                file_results_aggregated = path.joinpath(f"results_{self.date_id}.json")
+                file_results_aggregated = path.joinpath(f"results.json")
                 file_results_aggregated.open("w", encoding="utf-8").write(dumped)
 
                 if self.api and self.push_results_to_hub:
@@ -255,7 +255,7 @@ class EvaluationTracker:
                 path.mkdir(parents=True, exist_ok=True)
 
                 file_results_samples = path.joinpath(
-                    f"samples_{task_name}_{self.date_id}.json"
+                    f"samples_{task_name}.json"
                 )
 
                 for sample in samples:
