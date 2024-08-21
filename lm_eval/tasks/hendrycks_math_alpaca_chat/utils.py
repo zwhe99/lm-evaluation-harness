@@ -17,13 +17,19 @@ def process_docs(dataset: datasets.Dataset) -> datasets.Dataset:
 
 def process_results(doc: dict, results: List[str]) -> Dict[str, int]:
     retval = 0
-    indices = [pos for pos, char in enumerate(results[0]) if char == "$"]
-    if len(indices) <= 1:
-        answer = results[0]
+    split_ans = results[0].split("The answer is: ")
+    if len(split_ans) > 1:
+        ans = split_ans[1]
+        extract_ans_tmp = ans.split(".\n")[0].strip()
+        if len(extract_ans_tmp) > 0 and extract_ans_tmp[-1] == ".":
+            extract_ans = extract_ans_tmp[:-1]
+        else:
+            extract_ans = extract_ans_tmp
+        extract_ans = extract_ans.strip()
     else:
-        answer = results[0][indices[0] + 1 : indices[-1]]
+        extract_ans = "[INVALID]"
 
-    if is_equiv(answer, remove_boxed(last_boxed_only_string(doc["solution"]))):
+    if is_equiv(extract_ans, remove_boxed(last_boxed_only_string(doc["solution"]))):
         retval = 1
 
     results = {
